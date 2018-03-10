@@ -1,0 +1,14 @@
+./mktreedstchain_sct_fitABC1 3 -1 6944 -1
+./mktreedstchain_sct_fitABC1 3 -1 6945 -1
+./mktreedstchain_sct_fitABC1 3 -1 6946 -1
+./mktreedstchain_sct_fitABC1 3 -1 6947 -1
+./mktreedstchain_sct_fitABC1 3 -1 6948 -1
+./mktreedstchain_sct_fitABC1 3 -1 6949 -1
+./mktreedstchain_sct_fitABC1 3 -1 6950 -1
+./mktreedstchain_sct_fitABC1 10 -1 6944 -1
+./mktreedstchain_sct_fitABC1 10 -1 6945 -1
+./mktreedstchain_sct_fitABC1 10 -1 6946 -1
+./mktreedstchain_sct_fitABC1 10 -1 6947 -1
+./mktreedstchain_sct_fitABC1 10 -1 6948 -1
+./mktreedstchain_sct_fitABC1 10 -1 6949 -1
+./mktreedstchain_sct_fitABC1 10 -1 6950 -1

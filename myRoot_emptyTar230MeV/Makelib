@@ -1,0 +1,37 @@
+#! /bin/sh
+
+# Script to generate a shared library.
+# Called by $ROOTSYS/src/Make-macros, the makefile backend.
+
+
+PLATFORM=$1
+LD=$2
+LDFLAGS=$3
+SOFLAGS=$4
+SONAME=$5
+LIB=$6
+OBJS=$7
+
+rm -f $LIB
+
+if [ $PLATFORM = aix ]; then
+   echo this is aix
+elif [ $PLATFORM = hpux ]; then
+   echo $LD $SOFLAGS $LDFLAGS -o $LIB $OBJS
+   $LD $SOFLAGS $LDFLAGS -o $LIB $OBJS
+elif [ $PLATFORM = solaris ]; then
+   echo $LD $SOFLAGS $LDFLAGS -o $LIB $OBJS
+   $LD $SOFLAGS $LDFLAGS -o $LIB $OBJS
+elif [ $LD = KCC ]; then
+   echo $LD $LDFLAGS -o $LIB $OBJS
+   $LD $LDFLAGS -o $LIB $OBJS
+else
+   echo $LD $SOFLAGS$SONAME $LDFLAGS -o $LIB $OBJS
+   $LD $SOFLAGS$SONAME $LDFLAGS -o $LIB $OBJS
+fi
+
+chmod 555 $LIB
+
+echo "$LIB done"
+
+exit 0

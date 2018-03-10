@@ -1,0 +1,1513 @@
+#ifndef __CINT__
+
+// #include <math.h>
+// .x unpack_lmd_mktree_2d_plot_all.C++g()  
+// 
+#include "TFile.h"
+#include "TProfile.h"
+#include "TH1F.h"
+#include "TH1D.h"
+#include "TH1.h"
+#include "TH2F.h"
+#include "TDirectory.h"
+#include "TRandom.h"
+#include "TNtuple.h"
+#include "TCanvas.h"
+#include "TTree.h"
+#include "TStyle.h"
+#include "TChain.h"
+#include "TF1.h"
+#include "TLatex.h"
+#include "TBranch.h"
+#include "TCutG.h"
+#include "TROOT.h"
+#include "TLine.h"
+#include "TLegend.h"
+#include "TChainElement.h"
+#include "TSpectrum.h"
+#include "TSystem.h"
+#include "TMarker.h"
+
+#include "TAGroot.hxx"
+#include "TAGmbsEvent.hxx"
+#include "TAGactMbsReader.hxx"
+#include "TAGaction.hxx"
+#include "TAGmbsEventFilterType.hxx"
+
+#include <stdlib.h>
+
+
+#include "TROOT.h"
+#include "TControlBar.h"
+#include "TApplication.h"
+#include "TSystem.h"
+#include "TString.h"
+
+
+#endif
+
+#include "mktreeraw.hxx"
+#include "geo.hxx"
+
+//___________________________________________________________________
+
+Double_t Det3(Double_t A[3][3]){
+Double_t det=0.;
+det=A[0][0]*A[1][1]*A[2][2]+A[1][0]*A[2][1]*A[0][2]+A[0][1]*A[1][2]*A[2][0]-
+    A[2][0]*A[1][1]*A[0][2]-A[1][0]*A[0][1]*A[2][2]-A[2][1]*A[1][2]*A[0][0];
+return det;
+}
+//___________________________________________________________________
+
+void unpack_lmd_mktree_2d_plot_all(){
+
+
+
+time_t start,end; //For time processing measurement.
+double dif;	//For time processing measurement.
+
+
+gStyle->SetOptStat();
+gStyle->SetOptFit(1111);
+//gStyle->SetOptDate();
+gStyle->SetOptTitle(1);
+
+
+  TAGroot tagroot;
+  TAGmbsEvent *mbs_sevt = new TAGmbsEvent();
+  TAGmbsIStream *a_in = new TAGmbsIStream();
+
+
+const int runs[]={
+//6801 cosmics
+// 6802, // 230 MeV 2 nA p+48Ti
+// 6803  // 230 MeV 2 nA p+48Ti
+      // wymiana kabli
+//6804,  // 230 MeV 2 nA p+48Ti
+//6805,  // 230 MeV 2 nA p+48Ti
+//6806,  // 230 MeV 2 nA p+48Ti
+//6807,  // 230 MeV 2 nA p+48Ti
+//6808,  // 230 MeV 2 nA p+48Ti
+//6809,  // 230 MeV 2 nA p+48Ti
+//6810,  // 230 MeV 2 nA p+48Ti
+//6811,  // 230 MeV 2 nA p+48Ti
+//6815, //empty
+//6819
+//6820 //empty
+//6824 //empty
+
+// 6825, //empty 230 MeV
+// 6826, //empty
+// 6827, //empty
+// 6828, //empty
+// 6829, //empty
+// 6830, //empty
+// 6831 //empty
+
+// 6835, //Ti 230 MeV
+// 6836, //Ti 230 MeV
+// 6837, //Ti 230 MeV
+// 6838 //Ti 230 MeV
+
+//Ti 230 MeV 3 nA
+//6842 //zmieniony pretrigger na PD0 -100
+// 6843, //zmieniony pretrigger na PD0 -20 
+// 6844 //
+
+//trigger z PD0 bez tarczy 230 MeV 3 nA
+// 6846, 
+// 6847, 
+// 6848,
+// 6849,
+// 6850
+
+
+//trigger z PD0 Ti 230 MeV 3 nA
+// 6851,
+// 6852,
+// 6853
+// 6854
+// 6855
+
+// ustawianie 100 MeV
+// 6856 - 63
+
+// 100 MeV, triggeer PD0 50 nA 
+//6865,
+//6866,
+//6867,
+//6868,
+//6869,
+//6870
+
+// 100 MeV, trigger PD1, 50 nA
+//6871,
+//6872,
+//6873,
+//6874,
+//6875
+
+// 130 MeV, 5 nA, Ti, trigger PD1
+
+//6876,
+//6877,
+//6878,
+//6882
+
+// 130 MeV, 10 nA, no target, trigger PD1
+
+// 6890,
+// 6891,
+// 6892,
+// 6893,
+// 6894,
+// 6895,
+// 6896
+
+// 130 MeV, 10 nA 48Ti, trigger PD1
+//6897,
+//6898,
+//6899,
+//6900,
+//6901,
+//6902,
+//6903,
+//6904,
+//6905,
+//6906
+
+// 180 MeV, 5 nA, no target, trigger PD1 
+
+//6907,
+//6908,
+//6909,
+//6910,
+//6911,
+//6912,
+
+// 180 MeV, 1 nA, no target, trigger PD1
+
+//6913,
+//6914,
+//6915,
+//6916
+ 
+// 180 MeV, 1 nA, 48Ti, trigger PD1
+
+//6917, 
+//6918,
+//6919,
+//6920,
+//6921,
+//6922,
+//6923,
+//6924,
+//6925,
+//6926
+
+// 180 MeV, 15 nA, 48Ti, PD1
+
+//6927,
+//6928,
+
+// 180 MeV 15 nA, no target, PD1
+
+//6929,
+//6930,
+//6931,
+
+// 130 MeV, 15 nA, no target, Tr: PD1
+//6932,
+//6933,
+//6934,
+//6935,
+//6936,
+//6937
+
+// 130 MeV 15 nA, 48Ti, Tr: PD1
+
+//6938,
+//6939,
+//6940,
+//6941,
+//6942,
+//6943
+
+// 130 MeV, 15 nA, 12/13C, Tr: PD1
+
+//6944,
+//6945,
+//6946,
+//6947,
+//6948,
+//6949,
+//6950
+
+// 130 MeV, 5 nA, 12/13C, PD1
+
+// 6953,
+// 6954,
+// 6955,
+// 6956,
+// 6957,
+// 6958,
+// 6960,
+// 6961,
+// 6962,
+// 6963,
+// 6964,
+// 6965,
+// 6966,
+// 6967,
+// 6968,
+// 6969,
+// 6970,
+// 6971,
+// 6972,
+// 6973,
+// 6974,
+// 6975,
+// 6976,
+// 6977,
+// 6978,
+// 6979,
+// 6980,
+// 6981,
+// 6982,
+// 6983,
+// 6984,
+// 6985,
+// 6986,
+// 6987,
+// 6988,
+// 6989,
+// 6990,
+// 6991,
+// 6996  //pre trigger += 120 ch
+
+// calib 110 MeV 5 nA
+// 7012,
+// 7013,
+// 7014,
+// 7015,
+// 7016,
+// 7017 // only left side was triggering up to now
+
+// calib 120 MeV
+// 7018,
+// 7019,
+// 7020,
+// 7021,
+// 7022,
+// 7023,
+// 7024,
+// 7025
+
+// calib 140 MeV
+// 7026,
+// 7027,
+// 7028,
+// 7029,
+// 7030,
+// 7031
+
+// 130 MeV bez tarczy 5 nA
+// 7032,
+// 7033,
+// 7034,
+// 7035,
+// 7036,
+// 7037,
+// 7038,
+// 7039,
+// 7040,
+// 7041,
+// 7042
+
+// 230 MeV bez tarczy 2 nA
+//7043,
+//7044,
+//7045,
+//7046,
+//7047,
+//7048
+
+// 230 MeV, 2 nA, 48Ti, Tr:PD1
+
+//7050,
+//7051,
+//7052,
+//7053,
+//7054,
+//7055,
+//7056,
+//7057,
+//7058,
+//7059,
+//7060,
+//7061
+
+// 230 MeV, 2 nA, 12/13C, Tr. PD1
+
+ 7062,
+ 7063,
+ 7064,
+
+// 230 MeV, 2 nA, 12/13C, Trigger: PD0
+
+ 7065,  
+ 7066,
+ 7067,
+ 7068,
+
+// reduced intensity to 1 nA
+ 7079,
+// reduced further
+ 7082,
+ 7083,
+ 7085,
+ 7086,
+ 7087,
+ 7088,
+7089,
+ 7090,
+ 7091,
+ 7092,
+ 7093,
+ 7094,
+ 7095,
+ 7096,
+ 7097,
+ 7098,
+ 7099,
+ 7100,
+ 7101, 
+ 7102,
+ 7103,
+ 7104,
+ 7105,
+ 7106,
+ 7107,
+ 7108,
+ 7109,
+ 7110,
+ 7111,
+ 7112,
+ 7113,
+ 7114,
+ 7115,
+ 7116,
+ 7117,
+ 7118,
+ 7119,
+ 7120,
+ 7121,
+ 7122,
+ 7123,
+ 7124,
+ 7125,
+ 7126,
+ 7127,
+ 7128,
+ 7129,
+ 7130,
+ 7131,
+7132,
+ 7133,
+ 7134,
+ 7135,
+ 7136,
+ 7137,
+ 7138,
+ 7139,
+ 7140,
+ 7141,
+ 7142,
+ 7143,
+ 7144,
+ 7145,
+ 7146,
+ 7147,
+ 7148,
+ 7149,
+ 7150,
+ 7151,
+ 7152,
+ 7153,
+ 7154,
+ 7155,
+ 7156,
+ 
+ 7157,
+ 7158,
+ 7159,
+ 7160,
+ 7161,  
+ 7162,
+ 7163,
+ 7164,
+ 7165,
+ 7166,
+ 7167,
+ 7168,
+ 7169,
+ 7170,
+ 7171,
+ 7172,
+ 7173,
+ 7174,
+ 7175,
+ 7176,
+ 7177,
+ 7178,
+ 7179,
+ 7180,
+ 7181,
+ 7182,
+ 7183,
+ 7184,
+ 7185,
+ 7186,
+ 7187,
+ 7188,
+ 7189,
+ 7190,
+ 7191,
+ 7192,
+ 7193,
+ 7194,
+ 7195,
+ 7196,
+ 7197,
+ 7198,
+ 7199,
+ 7200,
+ 7201,
+ 7202,
+ 7203,
+ 7204,
+ 7205,
+ 7206,
+ 7207,
+ 7208,
+ 7209,
+ 7210,
+ 7211,
+ 7212,
+ 7213,
+ 7214,
+ 7215,
+ 7216,
+ 7217,
+ 7218,
+ 7219,
+ 7220,
+ 7221,
+ 7222,
+ 7223,
+ 7224,
+ 7225,
+ 7226,
+ 7227,
+ 7228,
+ 7229,
+ 7230,
+ 7231,
+ 7232,
+ 7233,
+ 7234,
+ 7235,
+ 7236,
+ 7237,
+ 7238,
+ 7239,
+ 7240
+// 7241
+
+// 230 MeV, 0.2 nA (current source 4.01), Trigg: PD0, 48 Ti
+
+// 7242,
+// 7243,
+// 7244,
+// 7245,
+// 7246,
+// 7247
+
+// 230 MeV, 0.2 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+
+// 7252,
+// 7253,
+// 7254,
+// 7255,
+// 7256,
+// 7257,
+// 7258,
+// 7259,
+// 7260,
+// 7261,
+// 7262,
+// 7263,
+// 7264,
+// 7265
+
+// kalibracja
+// 200 MeV, 1 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+// 7266,
+// 7267,
+// 7268,
+// 7269,
+// 7270
+
+// 170 MeV, 5 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+// 7271,
+// 7272,
+// 7273,
+// 7274,
+// 7275
+
+// 140 MeV, 10 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+// 7276,
+// 7277,
+// 7278,
+// 7279,
+// 7280,
+// 7281
+
+// 110 MeV, 5 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+// 7282,
+// 7283,
+// 7284,
+// 7285,
+// 7286
+
+// 85 MeV, 25 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+// 7287,
+// 7288,
+// 7289,
+// 7290,
+// 7291,
+// 7292
+
+// 80 MeV, 25 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+// 7293,
+// 7294,
+// 7295,
+// 7296,
+// 7297,
+// 7298
+
+// 70 MeV, 25 nA (current source 8.01), Trigg: PD0, 48 Ti pretrigger PD0=200 ch
+//7299,
+//7300,
+//7301,
+//7302,
+//7303
+
+// unknown energy MeV,0.2 nA (CS 8.0), Trigg: PD0, No target
+
+//7306,
+//7307,
+//7308
+
+// 230 MeV, 0.2 nA (CS 8.00)Trigg PD0, No target
+
+//7309,
+//7310,
+//7311
+//7312
+
+// As earlier but beam shiftef 5 mm to Eye
+
+//7313 - 7315
+
+// 3 mm
+
+// 7316 - 7317
+
+// -1.6 mm
+
+// 7318
+
+// standard settings bem in the center
+
+//7320
+
+// standard + 1 mm to Eye
+
+// 7322
+
+// standard - 1 mm from Eye
+
+// 7325
+
+// standard - beam in the center of pipe
+// 230 MeV, 1 nA, CS 4.00, no taret
+
+//7327 
+
+// unknown beam position - beam profile measurement at the chaber is out of
+// order 
+
+//7331
+
+//7333
+
+// Beam profilometer is out of order. Beam position known only approximately.
+// Measurement of background
+// E - 230 MeV, I - 0.2 nA (SC = 4.00), I beam dump ~290 pA, Trigg. PD0
+// No target
+
+//7334,
+//7335, 
+//7336,
+//7337,
+//7338,
+// 7339 drop of beam current - wrong file
+// 7340 - wrong file
+// 7341 - wrong file
+
+//7342,
+//7343,
+//7344,
+//7345
+
+// Ti taget, Beam parameters as earlier
+
+//7346,
+//7347,
+//7348,
+//7349
+
+//7356 
+
+
+// Single trigger prescaled by 1000
+
+// Beam parameters as earlier
+
+ //7361,
+ //7362,
+// 7363,
+// 7364
+
+//7366 //prescaling 8000 (prescaling 1000)
+
+//7367 // singles 8 (no prescaling)
+
+// prescaling 8000, Ti, 230 MeV, 108 pA, ~530 evt/s, ~ 13 min/run
+ //7368,
+// 7369,
+// 7370, 
+// 7369,
+// 7370,
+// 7371,
+// 7372,
+// 7373,
+// 7374,
+// 7375,
+// 7376,
+// 7377,
+// 7378,
+// 7379,
+// 7380,
+// 7381,
+// 7382,
+// 7383,
+// 7384,
+// 7385,
+// 7386,
+// 7387,
+// 7388
+
+// prescaling 8000, No target, 230 MeV, 108 pA, ~120 evt/s, ~ 30 min/run
+//7389
+//7390,
+//7391,
+//7392,
+//7393,
+//7394,
+//7395,
+//7396
+
+
+// 26.06 cosmics
+
+//7398
+//27.06
+//
+
+
+
+// 
+
+};
+
+
+//const int x_off=0;
+//const int x_off=500;
+const int x_off=1000;
+
+int ind_rmin = 0;
+int ind_rmax = sizeof(runs)/sizeof(int)-1;
+int nruns=ind_rmax+1;
+
+printf("nruns: %d\n",nruns);
+
+  ASYgeo *gg = new ASYgeo();
+  gg->ReadGeo(Form("%s/geo/geo_map.geo",gSystem->ExpandPathName("$S394WRK")));
+  
+
+const char *fname_form="/mnt/disk3/spall_2017_06/run%04d.lmd";
+//const char *fname_form="run%04d.lmd";
+
+int rmin =  1000000000;
+int rmax = -1000000000;
+Long_t id, size, flags, modtime;
+for(int ir=ind_rmin;ir<=ind_rmax;ir++){
+  int fret = gSystem->GetPathInfo(Form(fname_form,runs[ir]), &id, &size, &flags, &modtime);
+  if(!fret){
+    printf("run %d OK\n",runs[ir]);
+  }
+  else{
+    printf("run %d not found\n",runs[ir]);
+  }
+  if(runs[ir]<rmin) rmin=runs[ir];
+  if(runs[ir]>rmax) rmax=runs[ir];
+}
+
+
+TAGmbsEventFilterType* mbs_filt = new TAGmbsEventFilterType(36,10);
+
+  const int NROW = 5;
+  const int NCOL = 7;
+const int NDET = 35;
+TCanvas* cf01 = new TCanvas(Form("cf01_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | amplitudes 0 vs 1",rmin,rmax),x_off+0,0,800,800);
+cf01->Divide(7,5,0.001,0.001,10);
+cf01->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* cf12 = new TCanvas(Form("cf12_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | amplitudes 1 vs 2",rmin,rmax),x_off+20,20,800,800);
+cf12->Divide(7,5,0.001,0.001,10);
+cf12->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+// TCanvas* cf012 = new TCanvas(Form("cf012_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | amplitudes 1 vs 0,2",rmin,rmax),x_off+30,30,800,800);
+// cf012->Divide(7,5,0.001,0.001,10);
+// cf012->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* cpds = new TCanvas(Form("cpds_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | pedestals",rmin,rmax),x_off+40,40,800,800);
+cpds->Divide(7,15,0.001,0.001,10);
+cpds->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* ct00 = new TCanvas(Form("ct00_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | t0",rmin,rmax),x_off+40,40,800,800);
+ct00->Divide(7,15,0.001,0.001,10);
+ct00->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* cscl = new TCanvas(Form("cscl_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | scalers",rmin,rmax),x_off+60,60,800,800);
+cscl->Divide(1,3,0.001,0.001,10);
+cscl->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* cr1d0 = new TCanvas(Form("cr1d0_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | raw1d0",rmin,rmax),x_off+80,80,800,800);
+cr1d0->Divide(7,5,0.001,0.001,10);
+cr1d0->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* cr1d1 = new TCanvas(Form("cr1d1_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | raw1d1",rmin,rmax),x_off+90,90,800,800);
+cr1d1->Divide(7,5,0.001,0.001,10);
+cr1d1->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+TCanvas* cr1d2 = new TCanvas(Form("cr1d2_Runs_%d-%d",rmin,rmax),Form("Runs %d-%d | raw1d2",rmin,rmax),x_off+100,100,800,800);
+cr1d2->Divide(7,5,0.001,0.001,10);
+cr1d2->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", 0,0, "ProcEvent(Int_t,Int_t,Int_t,TObject*)");
+for(int ip=1;ip<=NDET;ip++){
+     cf01->cd(ip);
+     gPad->SetLogz();
+     cf12->cd(ip);
+     gPad->SetLogz();
+//      cf012->cd(ip);
+//      gPad->SetLogz();
+     cr1d0->cd(ip);
+     gPad->SetLogy();
+     cr1d1->cd(ip);
+     gPad->SetLogy();
+     cr1d2->cd(ip);
+     gPad->SetLogy();
+}
+for(int ip=1;ip<=3*NDET;ip++){
+     cpds->cd(ip);
+     gPad->SetLogy();
+     ct00->cd(ip);
+     gPad->SetLogy();
+}
+
+TH2F *hamp01[NDET] = {0};
+TH2F *hamp12[NDET] = {0};
+//TH2F *hamp012[NDET] = {0};
+TH1F *hpds[NDET][3] = {{0,0,0}};
+TH1F *ht00[NDET][3] = {{0,0,0}};
+TH1F *hr1d[NDET][3] = {{0,0,0}};
+TH1F *hscl[3] = {0};
+TH1F *hz12[NDET] = {0};
+
+float px1 = 58;
+float py1 = 3228;
+float px2 = 3488;
+float py2 = 1000;
+float a12 = (py2-py1)/(px2-px1);
+float sqa12 = sqrt(a12*a12+1);
+
+for(int ip=0;ip<NDET;ip++){
+//    hamp01[ip] = new TH2F(Form("amp01_%02d",ip),Form("amp01_%02d",ip),800,0,16000,800,0,16000);
+//    hamp12[ip] = new TH2F(Form("amp12_%02d",ip),Form("amp12_%02d",ip),800,0,16000,800,0,16000);
+   int ip0 = gg->GetIndexFromSignal(ip, 0);
+   int ip1 = gg->GetIndexFromSignal(ip, 1);
+   int ip2 = gg->GetIndexFromSignal(ip, 2);
+   hamp01[ip] = new TH2F(Form("amp01_%02d",ip),
+   Form("Runs %d-%d | amp01_%02d %s vs %s",rmin,rmax,ip,
+   (char*)gg->GetLabel(ip0).c_str(),
+   (char*)gg->GetLabel(ip1).c_str()),
+   800,0,16000,800,0,16000);
+   hamp01[ip]->SetMinimum(1);
+   hamp12[ip] = new TH2F(Form("amp12_%02d",ip),
+   Form("Runs %d-%d | amp12_%02d %s vs %s",rmin,rmax,ip,
+   (char*)gg->GetLabel(ip1).c_str(),
+   (char*)gg->GetLabel(ip2).c_str()),
+//    800,0,16000,800,0,16000);
+   1000,0,3000,1000,0,3000);
+   hamp12[ip]->SetMinimum(1);
+
+//    hamp012[ip] = new TH2F(Form("amp012_%02d",ip),
+//    Form("Runs %d-%d | amp012_%02d %s %s %s",rmin,rmax,ip,
+//    (char*)gg->GetLabel(ip0).c_str(),
+//    (char*)gg->GetLabel(ip1).c_str(),
+//    (char*)gg->GetLabel(ip2).c_str()),
+//    1600,-12000,12000,800,0,12000);
+//    hamp012[ip]->SetMinimum(1);
+
+//    hamp012[ip] = new TH2F(Form("amp012_%02d",ip),
+//    Form("Runs %d-%d | amp012_%02d %s %s %s",rmin,rmax,ip,
+//    (char*)gg->GetLabel(ip0).c_str(),
+//    (char*)gg->GetLabel(ip1).c_str(),
+//    (char*)gg->GetLabel(ip2).c_str()),
+//    800,-12000,12000,800,0,12000);
+//    hamp012[ip]->SetMinimum(1);
+
+//    hamp012[ip] = new TH2F(Form("amp012_%02d",ip),
+//    Form("Runs %d-%d | amp012_%02d %s %s %s",rmin,rmax,ip,
+//    (char*)gg->GetLabel(ip0).c_str(),
+//    (char*)gg->GetLabel(ip1).c_str(),
+//    (char*)gg->GetLabel(ip2).c_str()),
+//    800,0,12000,800,0,12000);
+//    hamp012[ip]->SetMinimum(1);
+
+//  hamp01[ip] = new TH2F(Form("amp01_%02d",ip),Form("amp01_%02d",ip),800,0,800,800,0,800);
+//  hamp12[ip] = new TH2F(Form("amp12_%02d",ip),Form("amp12_%02d",ip),800,0,800,800,0,800);
+   hz12[ip] = new TH1F(Form("z12_%02d",ip),
+   Form("Runs %d-%d | amp012_%02d %s %s",rmin,rmax,ip,
+   (char*)gg->GetLabel(ip1).c_str(),
+   (char*)gg->GetLabel(ip2).c_str()),
+   1600,0,16000);
+  for(int ip1=0;ip1<3;ip1++){
+   int ip2 = gg->GetIndexFromSignal(ip, ip1);
+    if(ip1==0){
+    hpds[ip][ip1] = new TH1F(Form("pds_%02d_%d",ip,ip1),Form("Runs %d-%d | pds_%02d_%d %s",rmin,rmax,ip,ip1,(char*)gg->GetLabel(ip2).c_str()),1000,0,2000);
+    ht00[ip][ip1] = new TH1F(Form("t0_%02d_%d",ip,ip1),Form("Runs %d-%d | t0_%02d_%d %s",rmin,rmax,ip,ip1,(char*)gg->GetLabel(ip2).c_str()),512,0,512);
+    }
+    else{
+    hpds[ip][ip1] = new TH1F(Form("pds_%02d_%d",ip,ip1),Form("Runs %d-%d | pds_%02d_%d %s",rmin,rmax,ip,ip1,(char*)gg->GetLabel(ip2).c_str()),1000,0,2000);
+    ht00[ip][ip1] = new TH1F(Form("t0_%02d_%d",ip,ip1),Form("Runs %d-%d | t0_%02d_%d %s",rmin,rmax,ip,ip1,(char*)gg->GetLabel(ip2).c_str()),1024,0,1024);
+    }
+    printf(">> %d %d\n",ip,ip1);
+    hr1d[ip][ip1] = new TH1F(Form("r1d_%02d_%d",ip,ip1),Form("Runs %d-%d | r1d_%02d_%d %s",rmin,rmax,ip,ip1,(char*)gg->GetLabel(ip2).c_str()),2000,0,4000);
+  }
+}
+for(int ip=0;ip<3;ip++){
+  hscl[ip] = new TH1F(Form("scl_%d",ip),Form("Runs %d-%d | scl_%d",rmin,rmax,ip),35,0,35);
+}
+
+  
+   
+
+
+  Int_t i_nevent      = 0;
+  Int_t i_nevent_empty      = 0;
+  Int_t i_nevent_v1724      = 0;
+
+  Int_t ievt_tot = 0;
+
+int evtcount=0; 
+int big_count=0;
+int big_count8[8]={0}; 
+
+   int max_chn=700;
+   double FUN10[3][1024];
+
+     time (&start);
+for(Int_t irun=0; irun<nruns; irun++){
+
+a_in->Open(Form(fname_form,runs[irun]));
+printf("%s opened\n",Form(fname_form,runs[irun]));
+//a_in->Open("/lynx/Lynx/asyeos/usr/asyeos/krakow/test2011/cosmics0003.lmd");
+//exit(1);
+
+//exit(1);
+bool big_found=false;
+        int maxch = -1;
+        float dchmax=0;
+  int ievt=0;
+  int empty_evt=0; 
+while(!a_in->Eof()){
+
+    a_in->ReadEvent(mbs_sevt, mbs_filt);
+    Int_t i_nse = mbs_sevt->NSubEvent();
+  if(i_nse == 0) continue; // skip empty online dummy evts
+    Int_t e_rawid = mbs_sevt->EventRawId();
+    Int_t e_trigg = mbs_sevt->EventTrigger();
+    //cout<<"-------> "<<e_trigg<<endl;
+    if (e_trigg==1)continue;
+    
+    //printf("-------> Event %9d NSubEvent %3d\n",i_nevent,i_nse);
+//    if((i_nevent+1)%10000==0) printf("-------> Event %9d\n",i_nevent+1);
+    //printf("EventRawId: %d Trigger: %d\n",e_rawid,e_trigg);
+    //Short_t ccn = gTAGroot->CurrentCampaignNumber(); 
+    //Short_t crn = gTAGroot->CurrentRunNumber();
+    //Int_t   cen = gTAGroot->CurrentEventNumber();
+    //printf("-------> %3d %3d %9d\n",ccn,crn,cen);
+    //TAGeventId cei = gTAGroot->CurrentEventId();
+    //printf("-------> %9d \n",cei.EventNumber());
+
+    //printf("-------> Event %9d NSubEvent %3d trig %d\n",e_rawid,i_nse,e_trigg);
+
+	float amp[NDET][3]={{0,0,0}};
+	float g0[NDET][3]={{0,0,0}};
+	float g1[NDET][3]={{0,0,0}};
+	float g2[NDET][3]={{0,0,0}};
+
+  for (Int_t i_se = 0; i_se < i_nse; i_se++) {
+      Int_t i_nw         = mbs_sevt->SubEventSize(i_se);
+      Int_t i_setyp      = mbs_sevt->SubEventType(i_se);
+      Int_t i_sestyp     = mbs_sevt->SubEventSubType(i_se);
+      Int_t i_procid     = mbs_sevt->SubEventProcId(i_se);
+      Int_t i_proctyp    = mbs_sevt->SubEventProcType(i_se);
+      Int_t i_crate      = mbs_sevt->SubEventCrate(i_se);
+      const UInt_t* p_se = mbs_sevt->SubEventData(i_se);
+    
+//    printf("-------> i_setyp %d\n",i_setyp);
+    if(i_setyp == 36 && i_sestyp==1){//V1724
+//       printf("V1724\n");
+//      printf("SubEventType:     %d\n",i_setyp);
+//      printf("SubEventSize:     %d\n",i_nw);
+//       printf("SubEventSubType:  %d\n",i_sestyp);
+//       printf("SubEventProcId:   %d\n",i_procid);
+//       printf("SubEventProcType: %d\n",i_proctyp);
+//       printf("SubEventCrate:    %d\n",i_crate);
+//       printf("i_nw:    %d\n",i_nw);
+      
+      //if(0){
+      if(i_nw>0){
+        Int_t i_EVENT_SIZE0   = i_nw;
+        Int_t addr_mod=2;
+        do{
+        Int_t i_EVENT_SIZE    = (p_se[addr_mod+0]) & 0xfffffff;
+        Char_t i_1010         = Char_t((p_se[addr_mod+0]>>28) & 0xf);
+        Int_t i_CHANNEL_MASK  = (p_se[addr_mod+1]) & 0xff;
+        Int_t i_PATTERN       = (p_se[addr_mod+1]>>8) & 0xffff;
+        Int_t i_RES           = (p_se[addr_mod+1]>>25) & 0x3;
+        Int_t i_BOARD_ID      = (p_se[addr_mod+1]>>27) & 0x1f;
+        Int_t i_EVENT_COUNTER = (p_se[addr_mod+2]) & 0xffffff;
+        Int_t i_TRIG_TIME_TAG = (p_se[addr_mod+3]);
+        if(i_EVENT_SIZE>81){
+//    printf("-------> Event %9d NSubEvent %3d trig %d\n",e_rawid,i_nse,e_trigg);
+//        printf("%d %d\n",i_1010,i_EVENT_SIZE);
+//        printf("%d %d %d %d\n",i_BOARD_ID,i_RES,i_PATTERN,i_CHANNEL_MASK);
+//        printf("%d\n",i_EVENT_COUNTER);
+//        printf("%d\n",i_TRIG_TIME_TAG);
+        
+        int ich_indx=0;
+        for(int ich = 0;ich<8;ich++){  
+          if(i_CHANNEL_MASK & (1 << ich)){ //fired channel
+            ich_indx++;
+          }
+        }
+//         printf("No. fired channels %d\n",ich_indx);
+        Int_t n_sample = 0;
+        if(ich_indx>0) n_sample = 2*(i_EVENT_SIZE-4)/ich_indx;
+//        Int_t n_sample = i_EVENT_SIZE/4-1;
+//         printf("SAMPLE %d\n",n_sample);
+        
+        
+
+        ich_indx=0;
+        for(int ich = 0;ich<8;ich++){
+          int ifadc[n_sample];
+          double dfadc[n_sample];
+          double dfadc0[n_sample];
+          double dfadc1[n_sample];
+          
+          if(i_CHANNEL_MASK & (1 << ich)){ //fired channel
+	  int ggi  = gg->GetIndexFromFadc(i_BOARD_ID, ich);
+	  int mod  = gg->GetModuleNo(ggi);
+	  int isig = gg->GetSignalNo(ggi);
+          if(mod <0 || isig<0) continue;
+//	  printf("%8d %2d %d %2d %2d %s\n",ievt,i_BOARD_ID, ich,mod,isig,
+//         (char*)gg->GetLabel(ggi).c_str());
+
+          if(mod<0 || mod>=NCOL*NROW){
+            //printf("bad MOD\n");
+            continue;
+          }
+
+          Float_t emax=-1.e10;
+          Float_t emin= 1.e10;
+            int ii=0;
+            for(int is = 0;is<n_sample/2;is++){
+              Int_t i_data[2];
+              i_data[0] = ((p_se[addr_mod+4+ich_indx*n_sample/2+is])& 0x3fff);
+              i_data[1] = ((p_se[addr_mod+4+ich_indx*n_sample/2+is]>>16)& 0x3fff);
+              for(int ib=0;ib<2;ib++){
+                if(i_data[ib]>emax) emax=i_data[ib];
+                if(i_data[ib]<emin) emin=i_data[ib];
+                ifadc[ii++] = i_data[ib];
+              //printf("ch %1d is %4d %6d %6d\n",ich,is,i_data_msb,i_data_lsb);
+              }
+            }
+            ich_indx++;
+            hscl[isig]->Fill(float(mod)+0.5);
+
+	    //find max/min
+            int chmin = 0;
+            int chmax = 0;
+            int vmin =  1000000;
+            int vmax = -1000000;
+            for(int is = 0;is<n_sample;is++){
+              if(ifadc[is]<vmin){
+	        vmin=ifadc[is];
+		chmin = is;
+              }
+              if(ifadc[is]>vmax){
+	        vmax=ifadc[is];
+		chmax = is;
+              }
+	    }
+	    //find max/min
+
+            //pds 0-approx	    
+            double pds0   = 0;
+            double pds00   = 0;
+            double pds    = 0;
+            double pdsrms = 0;
+            double pdsrms00 = 0;
+            double pds1m  = 0;
+            double pds1r  = 0; 
+            double pds10m  = 0;
+            double pds10r  = 0; 
+            double rpds1m = 0; 
+            double rpds1r = 0;
+            double pds1m2 = 0; 
+
+            int np = n_sample;
+            double fnp = 0;
+            int np0 = 50;
+            for(int i=0; i<np0; i++){
+              fnp   +=1;
+              pds1m += double(ifadc[i]); 
+              pds1r += pow(double(ifadc[i]),2); 
+            }
+
+            pds0    = pds1m/fnp;
+            pdsrms = sqrt(fabs(pds1r/fnp-pow(pds0,2)));
+
+	    fnp = 0;
+            for(int i=n_sample-np0-1; i<n_sample; i++){
+              fnp   +=1;
+              pds10m += double(ifadc[i]); 
+              pds10r += pow(double(ifadc[i]),2); 
+            }
+            pds00    = pds10m/fnp;
+            pdsrms00 = sqrt(fabs(pds10r/fnp-pow(pds00,2)));
+            //pds 0-approx	
+            
+            
+// printf("#     %9d %d   -------------------------------------\n",ievt,ich);
+// printf("# pds0 %9.2f\n", pds0);
+
+//if(pds00<pds0) pds0=pds00;
+
+
+double t00=0;
+double t000=0;
+double a000=0;
+double b000=0;
+double t035=0;
+double t025=0;
+double t005=0;
+double y035=0;
+double y025=0;
+double y005=0;
+double dnpt=0;
+double hmaxi = 0;
+int icount=0;
+int imin = (chmax>50) ? chmax-50 : 1;
+int imax = (chmax<np-50) ? chmax+50 : np;
+for(int i=imin; i<=imax; i++){
+  hmaxi += double(ifadc[i]);
+  icount++;
+}
+hmaxi /= float(icount);
+for(int i=chmax; i>=1; i--){
+  if((double(ifadc[i])-pds0)<0.35*(hmaxi-pds0)){
+    t035 = double(i);
+    y035 = double(ifadc[i]);
+    break;
+  }
+}
+for(int i=int(t035); i>=1; i--){
+  if((double(ifadc[i])-pds0)<=0.25*(hmaxi-pds0)){
+    t025 = double(i);
+    y025 = double(ifadc[i]);
+    break;
+  }
+}
+for(int i=int(t025); i>=1; i--){
+  if((double(ifadc[i])-pds0)<0.05*(hmaxi-pds0)){
+    t005 = double(i);
+    y005 = double(ifadc[i]);
+    break;
+  }
+}
+
+
+// 2 lines
+Double_t As00=0.,Bs00=0.;
+Double_t As20=0.,Bs20=0.;
+Double_t fT10 = 0;
+int T10 = 0;
+int Tmin =int(t005)-20;
+if(Tmin<1) Tmin=1;
+//Tmin = 1; //!!!!!!!!!!!!1
+int Tmax =int(t035);
+{
+
+double Dmin=1.e10;
+
+Double_t As0=0.,Bs0=0.;
+Double_t As2=0.,Bs2=0.;
+Double_t sw1, swy1;
+Double_t sw2, swx2, swy2, swxx2, swxy2;
+Double_t xi,yi;
+int iii1 = 0;
+int iii2 = 0;
+
+sw1=swy1=0.;
+sw2=swxy2=swx2=swy2=swxx2=0.;
+for(int T1=1;T1<Tmin;T1++){
+  xi=double(T1)-0.5;
+  yi=double(ifadc[T1-1]);
+  sw1	+= 1.;
+  swy1  += yi;
+  iii1++;
+}
+for(int T1=Tmin;T1<=Tmax;T1++){
+  xi=double(T1)-0.5;
+  yi=double(ifadc[T1-1]);
+  sw2	+= 1.;
+  swx2  += xi;
+  swy2  += yi;
+  swxx2 += xi*xi;
+  swxy2 += xi*yi;
+  iii2++;
+}
+for(int T1=Tmin;T1<=Tmax-3;T1++){
+  xi=double(T1)-0.5;
+  yi=double(ifadc[T1-1]);
+  sw1	+= 1.;
+  swy1  += yi;
+  iii1++;
+  
+  sw2	-= 1.;
+  swx2  -= xi;
+  swy2  -= yi;
+  swxx2 -= xi*xi;
+  swxy2 -= xi*yi;
+  iii2--;
+ 
+  if(sw1==0){printf("!!!!! sw1==0\n");exit(1);}
+  As0 = 0;
+  Bs0 = swy1/sw1;
+
+  if(sw2==0){printf("!!!!! sw2==0\n");exit(1);}
+  double deno = sw2*swxx2-swx2*swx2;
+  if(deno==0){printf("!!!!! sw2*swxx2-swx2*swx2==0\n");exit(1);}
+  As2 = (sw2*swxy2-swx2*swy2)/(sw2*swxx2-swx2*swx2);
+  Bs2 = (swy2-As2*swx2)/sw2;
+  
+  double Dmin12=0;
+  for(int it=1;it<=T1;it++){
+    xi=double(it)-0.5;
+    yi=double(ifadc[it-1]);
+    Dmin12 += pow(As0*xi+Bs0-yi,2);
+  }
+  for(int it=T1+1;it<=Tmax;it++){
+    xi=double(it)-0.5;
+    yi=double(ifadc[it-1]);
+    Dmin12 += pow(As2*xi+Bs2-yi,2);
+  }
+  
+
+//   printf("--> %d %f %f | %f %f %f %f %d\n",
+//   T1,Dmin12,Dmin,(Bs0-Bs2)/As2,fabs((Bs0-Bs2)/As2-T1-1),Bs0,As2,iii2);
+  if(Dmin12<Dmin && As2>0 && fabs((Bs0-Bs2)/As2-T1-1)<10){// 
+    As00=As0;Bs00=Bs0;
+    As20=As2;Bs20=Bs2;
+    Dmin=Dmin12;
+    T10 = T1;
+  }
+}
+if(As20!=0){
+  fT10 = (Bs00-Bs20)/As20;
+}
+else{
+  fT10 = T10;
+  Bs00 = pds0;
+  //printf("!!!!!!!!!!!!As20==0\n");
+}
+//fT10 -=1;
+//printf("T10 %3d %f |  %f %f %f\n",T10,fT10,Bs00,As20,Bs20);
+}
+// double tt00 = t005-2.*(As20*t005+Bs20-Bs00)/As20; //styczna w t005 i min w tt00
+// printf("tt00 %f\n",tt00);
+// 2 lines
+
+t00=fT10;
+if(t00<0) t00=0; // bez tego segm.viol.
+pds=Bs00;
+int it00=int(t00);
+
+//printf("# pds1 %9.2f %9.2f\n", pds,t00);
+
+            for(int i=0; i<n_sample; i++){
+	      dfadc[i] = double(ifadc[i])-pds;
+            }
+	    
+
+
+// printf("# pds16 pds %8.1f rms %8.3f t0 %6.2f %6.2f %d  %d %d %f\n",
+// pds1m,pds1r,t00,t000,int(dnpt),int(t005),2*int(t025)-int(t005),a000);
+// //  printf("# pds16 %f %d %d\n",pds1m,module,channel);
+
+//if(t000>t00) t00=t000;
+// t00=t000;
+
+
+                
+
+
+ 	  if(mod>-1 && mod<NDET && pds>0 && emin-pds>-30){
+//	  if(mod>-1 && mod<NDET && pds>0){
+            hr1d[mod][isig]->Fill(emax-pds);
+//            hr1d[mod][isig]->Fill(emax);
+//            hr1d[mod][isig]->Fill(pds);
+	  }
+
+
+
+	  
+	  if(mod>-1 && mod<NDET){
+//   printf("MOD %d %d %f\n",mod,isig,amp[mod][isig]);
+             if(pds>0 && emin-pds>-30){
+//            if(pds>0){
+              hpds[mod][isig]->Fill(pds);
+              amp[mod][isig] = emax-pds;
+            }
+              ht00[mod][isig]->Fill(t00);
+	  }
+	  
+
+
+        } //fired channel
+        }//for(int ich = 0;ich<8;ich++)
+        }//i_EVENT_SIZE>81
+    addr_mod += i_EVENT_SIZE;
+    //printf("addr_mod %d\n",addr_mod);
+    }
+    while(addr_mod<i_EVENT_SIZE0-1);
+
+        
+      i_nevent_v1724 += 1;
+      }//if(i_nw>0)
+    }//V1724
+  }
+        
+//   if(empty_evt>0){
+// //     printf("Empty Event:    %d\n",empty_evt);
+//     event->Clear("C");
+//     i_nevent_empty += 1;
+//     i_nevent += 1;
+//     continue;
+//   }
+    
+  int flag4 =0, flag14 =0;
+cout<<i_nevent<<" "<<NDET<<" "<<endl;
+   for(int mod=0;mod<NDET;mod++){
+     if (mod==4)flag4++; 
+     if (mod==14)flag14++; 
+  }
+   int sum=flag4+flag14;    
+
+//    addr_mod += i_EVENT_SIZE;
+//    printf("addr_mod %d\n",addr_mod);
+//    if(addr_mod<i_EVENT_SIZE0-1) goto labmod;
+    
+    for(int mod=0;mod<NDET;mod++){
+   //printf("mod %d %d %f %f %f\n",mod,NDET,amp[mod][0],amp[mod][1],amp[mod][2]);
+//      if(amp[mod][0]>0 || amp[mod][1]>0) hamp01[mod]->Fill(amp[mod][1],amp[mod][0]);
+//      if(amp[mod][1]>0 || amp[mod][2]>0) hamp12[mod]->Fill(amp[mod][2],amp[mod][1]);
+     
+      if(amp[mod][0]>0 && amp[mod][1]>0 && amp[mod][2]<70) {
+	if (flag4==1 && flag14==1 && sum==2 ){
+	  hamp01[mod]->Fill(amp[mod][1],amp[mod][0]);
+	  //cout<<i_nevent<<" "<<e_trigg<<" "<<mod<<endl;
+	}
+      }
+//     if(amp[mod][0]>0 && amp[mod][1]>0) hamp01[mod]->Fill(amp[mod][1],amp[mod][0]);
+      if(amp[mod][1]>0 && amp[mod][2]>0){ 
+	if (mod==4)hamp12[mod]->Fill(amp[mod][2],amp[mod][1]);
+
+      }
+//      if(amp[mod][1]>50 && amp[mod][0]>50 && amp[mod][2]<70)
+//         hamp012[mod]->Fill(-amp[mod][0],amp[mod][1]);
+//      if(amp[mod][1]>50 && amp[mod][2]>50)
+//         hamp012[mod]->Fill( amp[mod][2],amp[mod][1]);
+
+//      if(amp[mod][1]>0 && amp[mod][2]>0){
+//        //printf("%f %f\n",-10000*0.5*log(amp[mod][1]/amp[mod][2]),sqrt(amp[mod][1]*amp[mod][2]));
+//        float uu = -2000*log(amp[mod][1]/amp[mod][2]);
+//        float vv = sqrt(amp[mod][1]*amp[mod][2]);
+//        hamp012[mod]->Fill(uu,vv);
+//      }
+//      if(amp[mod][0]>0 && amp[mod][1]>0 && amp[mod][2]<70){
+//         hamp012[mod]->Fill(amp[mod][1]-g0[mod][1],amp[mod][0]+g0[mod][1]);
+//      }
+
+
+     if(amp[mod][1]>0 && amp[mod][2]>0){
+       float dd = fabs(a12*amp[mod][2]-amp[mod][1])/sqa12;
+       //printf("%f %f %f\n",amp[mod][2],amp[mod][1],dd);
+       hz12[mod]->Fill(dd);
+     }
+    }    
+    
+    mbs_sevt->Clear();
+    i_nevent += 1;
+    ievt++;
+    ievt_tot++;
+//     if(i_nevent>100000) break;
+    if((i_nevent+1)%50000==0){
+      printf("-------> Event %9d V1724 %9d\n",i_nevent+1,i_nevent_v1724+1);
+//     for(int ip=0;ip<NDET;ip++){
+//       cf01->cd(NDET-ip);
+//       hamp01[ip]->Draw("col");
+//       cf12->cd(NDET-ip);
+//       hamp12[ip]->Draw("col");
+//     }
+//       cf01->Modified();
+//       cf01->Update();
+//       cf12->Modified();
+//       cf12->Update();
+    }
+
+  }//while(!a_in->Eof())
+	time (&end);
+	dif = difftime (end,start);
+	printf ("It took me %.2lf \n", dif );
+
+    for(int ip=0;ip<NDET;ip++){
+      cf01->cd(NDET-ip);
+      hamp01[ip]->Draw("col");
+      cf12->cd(NDET-ip);
+      hamp12[ip]->Draw("col");
+//      cf012->cd(NDET-ip);
+//       hamp012[ip]->Draw("col");
+//      hz12[ip]->Draw();
+      
+      
+      hpds[ip][0]->SetLineColor(2);
+      hpds[ip][1]->SetLineColor(4);
+      hpds[ip][2]->SetLineColor(1);
+      ht00[ip][0]->SetLineColor(2);
+      ht00[ip][1]->SetLineColor(4);
+      ht00[ip][2]->SetLineColor(1);
+      
+//       cpds->cd(NDET-ip);
+//       float hmaxi = hpds[ip][0]->GetMaximum();
+//       if(hpds[ip][1]->GetMaximum()>hmaxi) hmaxi=hpds[ip][1]->GetMaximum();
+//       if(hpds[ip][2]->GetMaximum()>hmaxi) hmaxi=hpds[ip][2]->GetMaximum();
+//       hpds[ip][2]->SetMaximum(hmaxi);
+//       hpds[ip][2]->Draw();
+//       hpds[ip][1]->Draw("same");
+//       hpds[ip][0]->Draw("same");
+      
+      cpds->cd(3*NDET-ip);
+      hpds[ip][2]->Draw();
+      cpds->cd(2*NDET-ip);
+      hpds[ip][1]->Draw();
+      cpds->cd(1*NDET-ip);
+      hpds[ip][0]->Draw();
+      
+      ct00->cd(3*NDET-ip);
+      ht00[ip][2]->Draw();
+      ct00->cd(2*NDET-ip);
+      ht00[ip][1]->Draw();
+      ct00->cd(1*NDET-ip);
+      ht00[ip][0]->Draw();
+      
+      hr1d[ip][0]->SetLineColor(2);
+      hr1d[ip][1]->SetLineColor(4);
+      hr1d[ip][2]->SetLineColor(1);
+//       hmaxi = hr1d[ip][0]->GetMaximum();
+//       if(hr1d[ip][1]->GetMaximum()>hmaxi) hmaxi=hr1d[ip][1]->GetMaximum();
+//       if(hr1d[ip][2]->GetMaximum()>hmaxi) hmaxi=hr1d[ip][2]->GetMaximum();
+//       hr1d[ip][2]->SetMaximum(hmaxi);
+      cr1d0->cd(NDET-ip);
+      hr1d[ip][0]->Draw();
+      cr1d1->cd(NDET-ip);
+      hr1d[ip][1]->Draw();
+      cr1d2->cd(NDET-ip);
+      hr1d[ip][2]->Draw();
+    }
+//       cf01->Modified();
+//       cf01->Update();
+//       cf12->Modified();
+//       cf12->Update();
+//       cpds->Modified();
+//       cpds->Update();
+      
+      cscl->cd(1);
+      hscl[0]->SetLineColor(2);
+      hscl[0]->SetMinimum(0);
+      hscl[0]->Draw();
+      cscl->cd(2);
+      hscl[1]->SetLineColor(4);
+      hscl[1]->SetMinimum(0);
+      hscl[1]->Draw();
+      cscl->cd(3);
+      hscl[2]->SetLineColor(1);
+      hscl[2]->SetMinimum(0);
+      hscl[2]->Draw();
+
+cf01->Modified();
+cf01->Update();
+cf12->Modified();
+cf12->Update();
+//cf012->Modified();
+//cf012->Update();
+cpds->Modified();
+cpds->Update();
+ct00->Modified();
+ct00->Update();
+cscl->Modified();
+cscl->Update();
+cr1d0->Modified();
+cr1d0->Update();
+cr1d1->Modified();
+cr1d1->Update();
+cr1d2->Modified();
+cr1d2->Update();
+
+  printf("run %04d nentries %8d Empty %8d\n",runs[irun],ievt,empty_evt);
+  ievt=0;
+  a_in->Close();
+  //exit(1);
+}
+
+
+}

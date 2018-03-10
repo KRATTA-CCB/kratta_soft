@@ -1,0 +1,32 @@
+# sudo mount 192.168.10.1:/data /data
+# sudo mount 192.168.10.24://volume1/12_2015 /data
+# sudo umount /data
+
+# z zewn:
+# sudo mount 10.10.1.253://volume1/12_2015 /data
+
+# bezposrednio:
+# Dell addr: 192.168.1.7
+# sudo mount 192.168.1.12://volume1/12_2015 /data
+# ping 192.168.1.12
+#ping 192.168.10.15
+#sudo mount 192.168.10.15://volume1/12_2015 /data
+# sudo chmod a+rw /data/*
+
+#mount from outside
+#ping 10.10.3.172
+#sudo mount 10.10.3.172://volume1/12_2015 /data
+
+# export ASOFTREF=/home/spall/wfjm
+export S394DAT=/home/ciepal/Main/KRATTA/spall-2017-06
+export S394DST=/home/ciepal/Main/KRATTA/spall-2017-06
+export S394WRK=/home/ciepal/Main/KRATTA/spall-2017-06
+export S394REF=/home/ciepal/Main/KRATTA/test-2014-10/wfjm
+export S394INC="-I$S394REF/src/TAGbase -I$S394REF/src/TAGmbs"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$S394REF/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$S394WRK
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$S394WRK/geo
+# export PATH=$PATH:$S394REF/src/TAGbase
+# export PATH=$PATH:$S394REF/src/TAGmbs
+
+

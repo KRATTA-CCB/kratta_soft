@@ -1,0 +1,4 @@
+#Thu, 24 Aug 2017 10:26:20 +0000 (GMT) +730205000 nsec
+# This file has been created automatically by BChain.C 
+  ECBBaseCXX = myClass.cxx
+ ECBBaseH   = myClass.h

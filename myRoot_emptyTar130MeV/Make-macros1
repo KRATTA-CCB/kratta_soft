@@ -1,0 +1,110 @@
+ ##### MACROS #####
+
+RINTLIBS      = -lRint
+EGLIBS        = -lEG -lEGPythia -lEGVenus
+GLLIBS        = -lRGL
+TTFLIBS       = -lGX11TTF
+
+LPATH         = $(ROOTSYS)/lib
+
+##### utilities #####
+
+MAKELIB       = ./Makelib
+
+##### libKRRun #####
+
+KRRS          = KRAnal.cxx $(ECBBaseCXX)
+
+KRRH          = KRAnal.h $(ECBBaseH) utility.h 
+
+KRRO          = $(KRRS:.cxx=.o)
+
+KRRL          = KRLinkDef.h
+
+KRRDS         = KR_Cint.cxx
+
+KRRDH         = $(KRRDS:.cxx=.h)
+
+KRRDO         = $(KRRDS:.cxx=.o)
+
+KRRLIB        = libKRAnal.$(SOEXT)
+
+##### nprun #####
+
+KRRMAINS     = KRA.cxx
+KRRMAINO     = $(KRRMAINS:.cxx=.o)
+KRRMAIN      = KRA
+
+##### all #####
+
+ALLSRCS       = $(KRRS) $(KRRMAINS)
+
+ALLDICT       = $(KRRDS)
+
+ALLOBJS       = $(KRRO) $(KRRMAINO)
+
+ALLLIBS       = $(KRRLIB)
+
+ALLEXECS      = $(KRRMAIN) 
+
+##### RULES #####
+
+.SUFFIXES: .cxx
+
+%.o:            %.cxx
+		$(CXX) $(OPT) $(CXXFLAGS) -c $<
+
+%.o:            %.c
+		$(CC) $(OPT) $(CFLAGS) -c $<
+
+##### TARGETS #####
+
+.PHONY:         all nplibs npexecs depend dist clean distclean
+
+
+all:            nplibs npexecs npdicts
+
+nplibs:         $(ALLLIBS)
+
+npexecs:        $(ALLEXECS)
+
+npdicts:	$(ALLDICTS)
+
+$(KRRMAIN):     $(KRRMAINO) $(ALLLIBS) CreateHistos.cxx WriteHistos.cxx
+		$(LD) $(LDFLAGS) -o $(KRRMAIN) $(KRRMAINO)  $(ALLLIBS)  -L$(KRRun)libKRRun.so\
+		-L$(LPATH) $(RINTLIBS) $(ROOTGLIBS) $(ROOTLDFLAGS) $(ROOTLIBS) -lGpad -lHist -lGraf -lGraf3d -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lRIO -lNet -lThread -lCore -lCint -pthread -lm -ldl -rdynamic  -lTMVA -lMinuit -lXMLIO -lMLP -lTreePlayer -L/usr/lib64/ -lstdc++
+
+$(KRRLIB):      $(KRRO) $(KRRDO)
+		@$(MAKELIB) $(PLATFORM) $(LD) "$(LDFLAGS)" \
+		   "$(SOFLAGS)" libKRAnal.$(SOEXT) $@ "$(KRRO) $(KRRDO) " 
+
+$(KRRDS):       $(KRRH) $(KRRL)
+		@echo "Generating dictionary $(KRRDS)..."
+		rootcint -f $(KRRDS) -c $(KRRH) $(KRRL)
+
+$(KRRDO):       $(KRRDS)
+		$(CXX) $(NOOPT) $(CXXFLAGS) -c $(KRRDS)
+
+
+depend:
+		./makedepend -f Make-depend -- $(CXXFLAGS) -- $(ALLSRCS)
+
+dist:
+		rm -f nprun.tar.gz ; \
+		tar cvf nprun.tar README Makefile.* Make-* Makelib *.cxx *.h *.C ; \
+		gzip nprun.tar
+
+clean:
+		@rm -f $(ALLOBJS); rm -f libKRAnal.so rm -f *~
+		@rm -f $(ALLOBJS); rm -f KRA rm KR_Cint*
+
+distclean:      clean
+		@rm -f $(ALLDICT) $(ALLLIBS) $(ALLEXECS)
+
+chain: clean
+ifeq ($(COMP),daq)
+	@rm -f $(ECBBaseCXX) $(ECBBaseH);rm -f ClassName.h; rm -f make-chain && touch make-chain;root -b -q MakeChain.C 
+endif
+ifeq ($(COMP),baribal)
+	@rm -f $(ECBBaseCXX) $(ECBBaseH);rm -f ClassName.h; rm -f make-chain && touch make-chain;root -b -q MakeChain_baribal.C 
+endif
